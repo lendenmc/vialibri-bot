@@ -27,7 +27,7 @@ parser.add_argument("-l", "--limit", type=check_positive)
 class Session(object):
     _host = "https://www.vialibri.net"
     _user_agent = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:103.0) Gecko/20100101 Firefox/103.0",
+        "User-Agent": os.environ.get("USER_AGENT"),
     }
     _wants_url = _host + "/wants"
 
@@ -45,8 +45,8 @@ class Session(object):
         data = {
             "csrf-token": csrf_token,
             "return-to": False,
-            "username": os.environ.get("username"),
-            "password": os.environ.get("password"),
+            "username": os.environ.get("USERNAME"),
+            "password": os.environ.get("PASSWORD"),
         }
         self.session.post(login_url, json=data)
         return self
