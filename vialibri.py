@@ -30,6 +30,7 @@ class Session(object):
         "User-Agent": os.environ.get("USER_AGENT"),
     }
     _wants_url = _host + "/wants"
+    _api_calls_time_interval = int(os.environ.get("API_CALLS_TIME_INTERVAL"))
 
     def __init__(self, session):
         self.session = session
@@ -65,10 +66,10 @@ class Session(object):
         stop = start + limit if limit else None
         wants_ids = self.get_wants_ids()[start:stop]
 
-        for id in wants_ids:
-            time.sleep(5)
+        for index, id in enumerate(wants_ids, start=1):
+            time.sleep(self._api_calls_time_interval)
             want_url = f"{self._wants_url}/{id}/search?include=new"
-            print(want_url)
+            print(f"{index}: {want_url}")
             self.session.get(want_url)
 
 
