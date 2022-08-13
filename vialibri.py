@@ -18,7 +18,7 @@ def check_positive(value):
 
 
 parser = argparse.ArgumentParser(
-    description="Load new matches across all wants a vialibri account"
+    description="Load new matches across all wants of a vialibri account"
 )
 parser.add_argument("-o", "--offset", type=check_positive, default=1)
 parser.add_argument("-l", "--limit", type=check_positive)
