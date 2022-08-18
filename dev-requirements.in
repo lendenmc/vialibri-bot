@@ -1,4 +1,2 @@
 -c requirements.txt
 pip-tools
-black
-pylint
