@@ -66,10 +66,10 @@ class Session(object):
         stop = start + limit if limit else None
         wants_ids = self.get_wants_ids()[start:stop]
 
-        for index, id in enumerate(wants_ids, start=1):
+        for index, id in enumerate(wants_ids):
             time.sleep(self._api_calls_time_interval)
             want_url = f"{self._wants_url}/{id}/search?include=new"
-            print(f"{index}: {want_url}")
+            print(f"{offset + index}: {want_url}")
             self.session.get(want_url)
 
 
