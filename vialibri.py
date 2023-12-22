@@ -75,8 +75,8 @@ class Session(object):
         for index, id in enumerate(wants_ids):
             time.sleep(self._api_calls_time_interval)
             want_url = f"{self._wants_url}/{id}/search?include=new"
-            print(f"{offset + index}: {want_url}")
             self.session.get(want_url)
+            print(f"{offset + index}: {want_url}")
 
 
 if __name__ == "__main__":
