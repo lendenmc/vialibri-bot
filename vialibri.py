@@ -43,7 +43,12 @@ class Session(object):
             self.session.get(login_url).content,
             "html.parser",
         )
-        csrf_token = login_page.body.find("input", {"name": "csrf-token"}).get("value")
+
+        csrf_token = re.search(
+            r"\"CSRF_TOKEN\":\"(\w+)\"",
+            login_page.body.find("script", {"type": "text/javascript"}).string,
+        ).group(1)
+
         data = {
             "csrf-token": csrf_token,
             "return-to": False,
