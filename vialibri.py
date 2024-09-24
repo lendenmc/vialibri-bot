@@ -2,9 +2,9 @@ import argparse
 import os
 import re
 import time
+from urllib.parse import unquote
 
 import requests
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -39,23 +39,16 @@ class Session(object):
 
     def __enter__(self):
         login_url = self._host + "/account/login"
-        login_page = BeautifulSoup(
-            self.session.get(login_url).content,
-            "html.parser",
-        )
-
-        csrf_token = re.search(
-            r"\"CSRF_TOKEN\":\"(\w+)\"",
-            login_page.body.find("script", {"type": "text/javascript"}).string,
-        ).group(1)
-
+        self.session.get(login_url)
+        xsrf_token = unquote(
+            self.session.cookies["XSRF-TOKEN"]
+        )  # decoding is needed because the '=' character at the end of the cookie string value is strangely percent-encoded
         data = {
-            "csrf-token": csrf_token,
             "return-to": False,
             "username": os.environ.get("USERNAME"),
             "password": os.environ.get("PASSWORD"),
         }
-        self.session.post(login_url, json=data)
+        self.session.post(login_url, json=data, headers={"X-XSRF-TOKEN": xsrf_token})
         return self
 
     def __exit__(self, type, value, traceback):
